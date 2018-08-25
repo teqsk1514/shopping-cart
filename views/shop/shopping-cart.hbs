@@ -1,0 +1,42 @@
+ {{# if products }}
+<div style="color:white">
+    <div class="row" style="margin-top:100px;">
+        <div class="col-sm-6 col-md-4 offset-3 ">
+            <ul class="list-group">
+                {{# each products }}
+                <li class="list-group-item">
+                    <strong style="color:black">{{ this.item.title}}</strong>
+                    <span class="badge badge-success">{{this.price}}</span>
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Action
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Reduce by 1</a></li>
+                            <li><a href="#">Remove All</a></li>
+                    </div>
+                    <span class="badge badge-dark" style="float:right">{{this.qty}}</span>
+                </li>
+                {{/each}}
+                </ul>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:30px;">
+        <div class="col-sm-6 col-md-4 offset-3">
+            <strong>Total: {{ totalPrice }}</strong>
+        </div>
+    </div>
+    <hr style="background:white">
+    <div class="row" style="margin-top:30px;">
+        <div class="col-sm-6 col-md-4 offset-3 ">
+            <a href="/checkout"><button type="button" class="btn btn-success">Checkout</button></a>
+        </div>
+    </div>
+</div>
+{{ else }}
+<div class="row" style="margin-top:30px; color:white;">
+    <div class="col-sm-6 col-md-4 offset-3 ">
+        <h2>No Items In Cart</h2>
+    </div>
+</div>
+{{/if}}
