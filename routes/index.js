@@ -3,15 +3,18 @@ var router = express.Router();
 
 var Product = require('../models/product');
 var Cart = require('../models/cart');
+
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
+  var successMsg = req.flash('success')[0];
   Product.find((err, docs) => {
     var productChunks = [];
     var chunkSize = 3;
     for (var i = 0; i < docs.length; i += chunkSize) {
       productChunks.push(docs.slice(i, i + chunkSize));
     }
-    res.render('shop/index', { title: 'Shoppong Sites', products: productChunks });
+    res.render('shop/index', { title: 'Shoppong Sites', products: productChunks, successMsg: successMsg, noMessage: !successMsg });
   });
 
 });
@@ -44,7 +47,39 @@ router.get('/checkout', (req, res, next) => {
     return res.redirect('/shopping-cart');
   }
   var cart = new Cart(req.session.cart);
-  res.render('shop/checkout', { total: cart.totalPrice })
-})
+  var errMsg = req.flash('error')[0];
+  res.render('shop/checkout', { total: cart.totalPrice, errMsg: errMsg, noError: !errMsg });
+});
+
+router.get('/clear', (req, res) => {
+  res.render('shop/shopping-cart', { products: null });
+});
+
+router.post('/checkout', (req, res) => {
+  if (!req.session.cart) {
+    return res.redirect('/shopping-cart');
+  }
+
+  var stripe = require("stripe")("sk_test_kymuQSCiTcqsGgRyQFniKs56");
+
+  var cart = new Cart(req.session.cart);
+
+  stripe.charges.create({
+    amount: cart.totalPrice * 100,
+    currency: "usd",
+    source: req.body.stripeToken, // obtained with Stripe.js
+    description: "test charges"
+  }, function (err, charge) {
+    // asynchronously called
+    if (err) {
+      req.flash('error', err.message);
+      return res.redirect('/checkout');
+    }
+    req.flash('success', 'Successfully bought product');
+    req.session.cart = null;
+    res.redirect('/');
+  });
+});
+
 
 module.exports = router;
