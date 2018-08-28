@@ -3,6 +3,7 @@ var router = express.Router();
 
 var Product = require('../models/product');
 var Cart = require('../models/cart');
+var Order = require('../models/order');
 
 
 /* GET home page. */
@@ -42,7 +43,7 @@ router.get('/shopping-cart', function (req, res, next) {
   res.render('shop/shopping-cart', { products: cart.generateArray(), totalPrice: cart.totalPrice });
 });
 
-router.get('/checkout', (req, res, next) => {
+router.get('/checkout', isLoggedIn, (req, res, next) => {
   if (!req.session.cart) {
     return res.redirect('/shopping-cart');
   }
@@ -51,11 +52,11 @@ router.get('/checkout', (req, res, next) => {
   res.render('shop/checkout', { total: cart.totalPrice, errMsg: errMsg, noError: !errMsg });
 });
 
-router.get('/clear', (req, res) => {
-  res.render('shop/shopping-cart', { products: null });
-});
+// router.get('/clear', (req, res) => {
+//   res.render('shop/shopping-cart', { products: null });
+// });
 
-router.post('/checkout', (req, res) => {
+router.post('/checkout', isLoggedIn, (req, res) => {
   if (!req.session.cart) {
     return res.redirect('/shopping-cart');
   }
@@ -75,11 +76,29 @@ router.post('/checkout', (req, res) => {
       req.flash('error', err.message);
       return res.redirect('/checkout');
     }
-    req.flash('success', 'Successfully bought product');
-    req.session.cart = null;
-    res.redirect('/');
+    var order = new Order({
+      user: req.user,
+      cart: cart,
+      address: req.body.address,
+      name: req.body.name,
+      paymentId: charge.id,
+    });
+
+    order.save((err, result) => {
+      req.flash('success', 'Successfully bought product');
+      req.session.cart = null;
+      res.redirect('/');
+    });
   });
 });
 
 
 module.exports = router;
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  req.session.oldUrl = req.url;
+  res.redirect('/user/signin');
+}
