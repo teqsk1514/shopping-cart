@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top nav-background">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
         aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span style="color:white" class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse " id="navbarSupportedContent ">
         <ul class="navbar-nav mr-auto ">
@@ -19,7 +19,7 @@
     "></i> Cart <span style="color:white " class="badge badge-success ">{{ session.cart.totalQty }}</span></a>
 
                 {{# if login }}
-                <a class="nav-link text-white " href="/user/profile "><i class="fas fa-user-circle "></i> User Account</a>
+                <a class="nav-link text-white " href="/user/profile "><i class="fas fa-user-circle "></i> Profile</a>
                 <a class="nav-link text-white " href="/user/logout "><i class="fas fa-sign-out-alt "></i> Logout</a>
                 {{ else}} {{!-- <a class="nav-link text-white " href="/user/signup "><i class="fas fa-user-plus "></i> Sign
                     Up

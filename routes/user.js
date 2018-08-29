@@ -3,6 +3,9 @@ var router = express.Router();
 var csurf = require('csurf');
 var passport = require('passport');
 
+var Cart = require('../models/cart');
+var Order = require('../models/order');
+
 
 
 //start thr csrf protection as the middleware.
@@ -12,7 +15,21 @@ router.use(csrfProtection);
 
 
 router.get('/profile', isLoggedIn, (req, res, next) => {
-    res.render('user/profile');
+    Order.find({
+        user: req.user,
+    }, (err, orders) => {
+        if (err) {
+            return res.write('Error');
+        }
+
+        var cart;
+        orders.forEach((order) => {
+            cart = new Cart(order.cart);
+            order.items = cart.generateArray();
+        });
+
+        res.render('user/profile', { orders: orders })
+    });
 });
 
 // logout should  be availabe is u r logged in 
