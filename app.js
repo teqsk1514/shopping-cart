@@ -47,7 +47,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  cookie: { maxAge: 18 * 60 * 1000 }
+  cookie: { maxAge: 6 * 60 * 1000 }
 }));
 app.use(flash());
 
