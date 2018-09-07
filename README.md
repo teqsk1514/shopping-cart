@@ -1,4 +1,7 @@
 # shopping-cart
 
-still in progress 
-dont clone write now.
+clone the repositories
+
+use npm install to install all the dependencies.
+
+npm start 
