@@ -1,4 +1,4 @@
- {{# if products }}
+{{# if products }}
 <div style="color:white">
     <div class="row" style="margin-top:100px;">
         <div class="col-sm-6 col-md-4 offset-4 ">
@@ -17,7 +17,7 @@
                     <span class="badge badge-dark" style="float:right">{{this.qty}}</span>
                 </li>
                 {{/each}}
-                </ul>
+            </ul>
         </div>
     </div>
 
@@ -30,10 +30,9 @@
     <div class="row" style="margin-top:30px;">
         <div class="col-sm-6 col-md-4 offset-4 ">
             <a href="/checkout"><button type="button" class="btn btn-success">Checkout</button></a>
-            <a href="/clear"><button type="button" class="btn btn-danger">Clear</button></a>
+            {{!-- <a href="/clear"><button type="button" class="btn btn-danger">Clear</button></a> --}}
         </div>
         <div class="col-sm-6 col-md-4 offset-4" style="margin-top:30px;">
-
         </div>
     </div>
 </div>
