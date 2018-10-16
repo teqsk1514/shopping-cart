@@ -12,9 +12,11 @@ router.get('/', function (req, res, next) {
   Product.find((err, docs) => {
     var productChunks = [];
     var chunkSize = 3;
+    console.log(docs);
     for (var i = 0; i < docs.length; i += chunkSize) {
       productChunks.push(docs.slice(i, i + chunkSize));
     }
+    // console.log(productChunks);
     res.render('shop/index', { title: 'Shoppong Sites', products: productChunks, successMsg: successMsg, noMessage: !successMsg });
   });
 
